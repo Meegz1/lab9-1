@@ -20,6 +20,36 @@ app.get("/quotes", async function(req, res){
 
 });//quotes
 
+app.get("/authorInfo", async function(req, res){
+    
+   let rows = await getAuthorInfo(req.query.authorId);
+  //res.render("quotes", {"records":rows});
+    res.send(rows)
+});//quotes
+
+function getAuthorInfo(authorId){
+    let conn = dbConnection();
+    
+    
+    return new Promise(function(resolve, reject){
+        conn.connect(function(err) {
+           if (err) throw err;
+           console.log("Connected!");
+        
+           let sql = `SELECT * 
+                      FROM q_author
+                      WHERE authorId = ${authorId}`;
+            console.log(sql);        
+           conn.query(sql, function (err, rows, fields) {
+              if (err) throw err;
+              //res.send(rows);
+              resolve(rows);
+           });
+        
+        });//connect
+    });//promise
+    
+}
 function getQuotes(query){
     
     let keyword = query.keyword;
@@ -31,17 +61,20 @@ function getQuotes(query){
            if (err) throw err;
            console.log("Connected!");
         
-           let sql = `SELECT quote, firstName, lastName, category FROM q_quotes
+           let params = [];
+        
+           let sql = `SELECT quote, firstName, lastName, category, authorId FROM q_quotes
                       NATURAL JOIN q_author
                       WHERE 
                       quote LIKE '%${keyword}%'`;
         
            if (query.category) { //user selected a category
-              sql += " AND category = '" + query.category + "'";
+              sql += " AND category = ?"; //To prevent SQL injection, SQL statement shouldn't have any quotes.
            }
+           params.push(query.category);    
         
            console.log("SQL:", sql)
-           conn.query(sql, function (err, rows, fields) {
+           conn.query(sql, params, function (err, rows, fields) {
               if (err) throw err;
               //res.send(rows);
               resolve(rows);
@@ -75,7 +108,7 @@ function getCategories(){
         });//connect
     });//promise
     
-}//getQuotes
+}//getCategories
 
 app.get("/dbTest", function(req, res){
 

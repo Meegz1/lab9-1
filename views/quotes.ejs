@@ -2,6 +2,27 @@
 <html>
     <head>
         <title> Famous Quote Search </title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script>
+    $(document).ready(function(){
+        
+            
+            $("a").on("click", function(){
+                alert("test"); 
+                $.ajax({
+            
+                    method: "GET",
+                    url: "",
+                    dataType: "",
+                    data: { "": },
+                    success: function(result,status) {
+                       alert(result);
+                    }
+            
+                });//ajax
+            })
+    });
+    </script>
     </head>
     <body>
         
@@ -10,7 +31,7 @@
         <% records.forEach( function(record){ %> 
         
             <i><%= record.quote %></i> <br>
-            -<%= record.firstName %> <%= record.lastName %>
+            <a href="#">-<%= record.firstName %> <%= record.lastName %> </a>
             <br><br>
 
         <% })  %>
