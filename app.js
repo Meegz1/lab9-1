@@ -43,6 +43,7 @@ function getAuthorInfo(authorId){
            conn.query(sql, function (err, rows, fields) {
               if (err) throw err;
               //res.send(rows);
+              conn.end();
               resolve(rows);
            });
         
@@ -77,6 +78,7 @@ function getQuotes(query){
            conn.query(sql, params, function (err, rows, fields) {
               if (err) throw err;
               //res.send(rows);
+              conn.end();
               resolve(rows);
            });
         
@@ -102,6 +104,7 @@ function getCategories(){
            conn.query(sql, function (err, rows, fields) {
               if (err) throw err;
               //res.send(rows);
+              conn.end();
               resolve(rows);
            });
         
@@ -122,6 +125,7 @@ app.get("/dbTest", function(req, res){
     
        conn.query(sql, function (err, rows, fields) {
           if (err) throw err;
+          conn.end();
           res.send(rows);
        });
     
